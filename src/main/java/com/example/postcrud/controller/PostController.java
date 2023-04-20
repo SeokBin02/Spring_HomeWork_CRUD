@@ -1,6 +1,7 @@
 package com.example.postcrud.controller;
 
 
+import com.example.postcrud.dto.PostDeleteResponseDto;
 import com.example.postcrud.dto.PostRequestDto;
 import com.example.postcrud.dto.PostResponseDto;
 import com.example.postcrud.dto.UpdateRequestDto;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
+@RequestMapping("/board")
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
@@ -46,8 +48,7 @@ public class PostController {
 
     // 선택한 게시글 삭제 API
     @DeleteMapping("/posts/{id}")
-    public int deletePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        return postService.deletePost(id, requestDto);
+    public PostDeleteResponseDto deletePost(@PathVariable Long id, HttpServletRequest request) {
+        return postService.deletePost(id, request);
     }
-
 }

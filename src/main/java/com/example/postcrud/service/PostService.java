@@ -1,6 +1,7 @@
 package com.example.postcrud.service;
 
 
+import com.example.postcrud.dto.PostDeleteResponseDto;
 import com.example.postcrud.dto.PostRequestDto;
 import com.example.postcrud.dto.PostResponseDto;
 import com.example.postcrud.dto.UpdateRequestDto;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,15 +132,35 @@ public class PostService {
         }
     }
 
+//    5. 선택한 게시글 삭제 API
+//            - 토큰을 검사한 후, 유효한 토큰이면서 해당 사용자가 작성한 게시글만 삭제 가능
+//    - 선택한 게시글을 삭제하고 Client 로 성공했다는 메시지, 상태코드 반환하기
     @Transactional
-    public int deletePost(Long id, PostRequestDto requestDto) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
-        if (post.getPassword().equals(requestDto.getPassword())) {
-            postRepository.deleteById(id);
-            return HttpStatus.OK.value();
+    public PostDeleteResponseDto deletePost(Long id, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+
+        if (token != null) { // 토큰이 비어있지 않다면
+            if (jwtUtil.validateToken(token)) { // 토큰의 유효성 검사
+                claims = jwtUtil.getUserInfoFromToken(token); // 토큰으로부터 유저의 정보를 방아옴.
+            } else {
+                throw new IllegalArgumentException("Token Error");
+            }
+
+            // 토큰 값으로 User Entity 초기화
+            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new NullPointerException("유저 정보가 존재하지 않습니다.")
+            );
+
+            // 삭제할 게시글 조회
+            postRepository.deleteByIdAndUserid(id, user.getId()).orElseThrow(
+                    () -> new NullPointerException("삭제할 게시글이 존재하지 않습니다.")
+            );
+            return new PostDeleteResponseDto("삭제에 성공하였습니다.", HttpStatus.OK.value());
+        } else {
+            return new PostDeleteResponseDto("삭제에 실패하였습니다.", HttpStatus.NOT_FOUND.value());
         }
-        return HttpStatus.NOT_FOUND.value();
     }
+
+
 }
