@@ -3,6 +3,7 @@ package com.example.postcrud.controller;
 
 import com.example.postcrud.dto.PostRequestDto;
 import com.example.postcrud.dto.PostResponseDto;
+import com.example.postcrud.dto.UpdateRequestDto;
 import com.example.postcrud.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,8 @@ public class PostController {
 
     // 선택한 게시글 수정 API
     @PutMapping("/posts/{id}")
-    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        return postService.updatePost(id, requestDto);
+    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody UpdateRequestDto requestDto, HttpServletRequest request) {
+        return postService.updatePost(id, requestDto, request);
     }
 
 

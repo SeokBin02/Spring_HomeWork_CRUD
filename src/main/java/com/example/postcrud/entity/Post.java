@@ -2,6 +2,7 @@ package com.example.postcrud.entity;
 
 
 import com.example.postcrud.dto.PostRequestDto;
+import com.example.postcrud.dto.UpdateRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,16 +29,19 @@ public class Post extends TimeStamped {
     @Column(nullable = false)
     private String content;
 
-    public Post(PostRequestDto requestDto) {
+    @Column(nullable = false)
+    private Long userid;
+
+    public Post(PostRequestDto requestDto, Long user_id) {
         this.title = requestDto.getTitle();
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
         this.content = requestDto.getContent();
+        this.userid = user_id;
     }
 
-    public void update(PostRequestDto requestDto) {
+    public void update(UpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
         this.content = requestDto.getContent();
     }
 }
