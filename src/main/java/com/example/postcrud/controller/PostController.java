@@ -1,10 +1,7 @@
 package com.example.postcrud.controller;
 
 
-import com.example.postcrud.dto.PostDeleteResponseDto;
-import com.example.postcrud.dto.PostRequestDto;
-import com.example.postcrud.dto.PostResponseDto;
-import com.example.postcrud.dto.UpdateRequestDto;
+import com.example.postcrud.dto.*;
 import com.example.postcrud.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/post")
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
@@ -27,7 +24,7 @@ public class PostController {
 
     // 게시글 작성 API
     @PostMapping("/posts")
-    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto, HttpServletRequest request) {
+    public PostResponseDto createPost(@RequestBody PostCURequestDto requestDto, HttpServletRequest request) {
         return postService.createPost(requestDto, request);
     }
 
@@ -41,7 +38,7 @@ public class PostController {
 
     // 선택한 게시글 수정 API
     @PutMapping("/posts/{id}")
-    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody UpdateRequestDto requestDto, HttpServletRequest request) {
+    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostCURequestDto requestDto, HttpServletRequest request) {
         return postService.updatePost(id, requestDto, request);
     }
 

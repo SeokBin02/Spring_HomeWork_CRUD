@@ -1,8 +1,7 @@
 package com.example.postcrud.entity;
 
 
-import com.example.postcrud.dto.PostRequestDto;
-import com.example.postcrud.dto.UpdateRequestDto;
+import com.example.postcrud.dto.PostCURequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,7 @@ import javax.persistence.*;
 public class Post extends TimeStamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -24,23 +23,20 @@ public class Post extends TimeStamped {
     private String username;
 
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
     private Long userid;
 
-    public Post(PostRequestDto requestDto, Long user_id) {
+    public Post(PostCURequestDto requestDto, Long user_id, String username) {
         this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
+        this.username = username;
         this.content = requestDto.getContent();
         this.userid = user_id;
+
     }
 
-    public void update(UpdateRequestDto requestDto) {
+    public void update(PostCURequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
