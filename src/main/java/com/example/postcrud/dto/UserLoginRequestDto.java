@@ -1,11 +1,12 @@
 package com.example.postcrud.dto;
 
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-public class PostRequestDto {
-    private String title;
+@NoArgsConstructor
+public class UserLoginRequestDto {
     private String username;
     private String password;
-    private String content;
 }
